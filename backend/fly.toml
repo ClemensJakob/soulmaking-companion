@@ -5,7 +5,7 @@ primary_region = "iad"
   dockerfile = "Dockerfile"
 
 [env]
-  PB_ORIGINS = "http://localhost:5173"
+  PB_ORIGINS = "https://clemensjakob.github.io/soulmaking-companion/"
   PORT = "8080"
 
 [[mounts]]
