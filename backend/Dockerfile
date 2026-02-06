@@ -1,6 +1,6 @@
 FROM alpine:3.20
 
-ARG PB_VERSION=0.24.7
+ARG PB_VERSION=0.36.2
 
 RUN apk add --no-cache ca-certificates curl unzip \
   && adduser -D -h /pb -s /sbin/nologin pb
