@@ -44,7 +44,7 @@ Update [backend/fly.toml](backend/fly.toml) with your Fly app name and region.
 ```bash
 cd backend
 flyctl launch --no-deploy
-flyctl volumes create pb_data --size 1 --region iad
+flyctl volumes create pb_data --size 1 --region fra
 ```
 
 Set runtime secrets for production origins (recommended to override the Fly config):
