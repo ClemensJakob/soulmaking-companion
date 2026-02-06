@@ -1,0 +1,22 @@
+# Node
+node_modules
+npm-debug.log*
+
+# Vite
+frontend/dist
+frontend/.vite
+
+# Coverage
+frontend/coverage
+
+# Env files
+.env
+frontend/.env
+backend/.env
+
+# PocketBase data
+backend/pb_data
+backend/pocketbase
+
+# OS
+.DS_Store
