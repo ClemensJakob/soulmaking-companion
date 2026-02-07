@@ -29,7 +29,7 @@ export function ElementsPage() {
   }, [])
 
   return (
-    <main className="p-1 fixed inset-0 overflow-hidden">
+    <main className="fixed inset-0 overflow-hidden bg-stone-950">
       {selectedKey && (
         <ElementDetailOverlay
           element={elements[selectedKey]}
@@ -37,7 +37,15 @@ export function ElementsPage() {
           onClose={() => setSelectedKey(null)}
         />
       )}
-      <div ref={containerRef} className="relative h-full w-full">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-rose-500/5 rounded-full blur-3xl" />
+      </div>
+      {/* Subtle grain texture */}
+      <div className="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
+      <div ref={containerRef} className="relative h-full w-full p-2">
         {elementKeys.map((key) => {
           const pos = positions.get(key)
           if (!pos) return null
@@ -61,10 +69,10 @@ export function ElementsPage() {
               key={key}
               onClick={() => handleSelect(key)}
               style={tagStyle}
-              className="absolute whitespace-nowrap rounded-full bg-[var(--tag-bg)] px-3 py-1 text-[var(--tag-text)] shadow-sm transition-colors hover:bg-[var(--tag-hover)]"
+              className="absolute whitespace-nowrap bg-transparent px-2 py-1 text-[var(--tag-bg)] transition-all duration-300 hover:text-[var(--tag-text)] hover:drop-shadow-[0_0_12px_var(--tag-bg)] active:scale-95"
             >
-              <span className="font-semibold">{firstLetter}</span>
-              {rest}
+              <span className="font-light opacity-90 hover:opacity-100">{firstLetter}</span>
+              <span className="font-extralight opacity-70">{rest}</span>
             </button>
           )
         })}

@@ -23,8 +23,16 @@ export function RandomElementPage() {
   const element = elements[currentKey]
 
   return (
-    <main className="min-h-dvh bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-4 py-8">
+    <main className="min-h-dvh bg-stone-950 flex flex-col relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl" />
+      </div>
+      {/* Subtle grain texture */}
+      <div className="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
+
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-8">
         <div
           className={`transition-all duration-300 ease-out transform ${
             isAnimating
@@ -38,9 +46,9 @@ export function RandomElementPage() {
         <button
           onClick={handleNewElement}
           disabled={isAnimating}
-          className="mt-8 px-8 py-3 bg-gray-900 text-white font-semibold rounded-full shadow-lg hover:bg-gray-800 hover:shadow-xl active:scale-95 transition-all duration-200 disabled:opacity-50"
+          className="mt-8 px-8 py-3 border border-white/20 text-white/70 font-light tracking-wide rounded-full hover:border-white/40 hover:text-white hover:tracking-wider active:scale-95 transition-all duration-300 disabled:opacity-50"
         >
-          Show Another Element
+          another
         </button>
       </div>
     </main>
