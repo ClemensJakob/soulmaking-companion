@@ -8,7 +8,7 @@ export type Element = {
 export const elements: Record<string, Element> = {
   energy_body_awareness: {
     name: 'Energy Body Awareness',
-    short_name: 'energy body awareness',
+    short_name: 'energy body',
     short_desc:
       'Imaginal perception includes sensitivity to the whole energy body, not just mental imagery.',
     long_desc:
@@ -16,7 +16,7 @@ export const elements: Record<string, Element> = {
   },
   loving_and_being_loved: {
     name: 'Loving and Being Loved',
-    short_name: 'loving and being loved',
+    short_name: 'loving / being loved',
     short_desc:
       "There's a felt mutual love—from you to the image and from the image to you, in its own style.",
     long_desc:
@@ -84,7 +84,7 @@ export const elements: Record<string, Element> = {
   },
   soft_and_elastic_edges: {
     name: 'Soft and Elastic Edges',
-    short_name: 'soft and elastic edges',
+    short_name: 'soft / elastic edges',
     short_desc: 'The boundaries of what the image is are soft, moving, changeable—not static.',
     long_desc:
       'Like a person, an image has edges that can shift over time: it can surprise you, expand, reconfigure, or become more subtle. This elasticity supports growth of meaning and feeling without hardening into fixed definitions. It allows refinement without rigidity. When edges soften, the imaginal becomes more breathable—less pinned down, more alive.',
@@ -106,7 +106,7 @@ export const elements: Record<string, Element> = {
   },
   created_and_discovered: {
     name: 'Created and Discovered',
-    short_name: 'created and discovered',
+    short_name: 'Create-Discover',
     short_desc: 'The image is both made and found—creation and discovery become "one action."',
     long_desc:
       'You participate in the image\'s arising, and yet it also feels as though it precedes you or has its own givenness. If you lean only on "created," it flattens into self-invention; only on "discovered," it can become rigid reification. The potency is the paradox held alive. This stance supports both responsibility (you\'re involved) and humility (you don\'t own it).',
@@ -137,7 +137,7 @@ export const elements: Record<string, Element> = {
   },
   infinite_echoing_and_mirroring: {
     name: 'Infinite Echoing and Mirroring',
-    short_name: 'echoing and mirroring',
+    short_name: 'infinite echoing',
     short_desc:
       'Image and life mirror and echo each other infinitely, some correspondences obvious, some hidden.',
     long_desc:
