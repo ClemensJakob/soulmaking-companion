@@ -10,6 +10,6 @@ test('renders a button link to elements', () => {
     </MemoryRouter>,
   )
 
-  const link = screen.getByRole('link', { name: /elements/i })
+  const link = screen.getByRole('link', { name: /explore all/i })
   expect(link).toHaveAttribute('href', '/elements')
 })
