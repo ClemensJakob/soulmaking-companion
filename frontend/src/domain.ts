@@ -5,6 +5,12 @@ export type Element = {
   long_desc: string
 }
 
+export type TagColor = {
+  bg: string
+  text: string
+  hover: string
+}
+
 export const elements: Record<string, Element> = {
   energy_body_awareness: {
     name: 'Energy Body Awareness',
@@ -224,3 +230,89 @@ export const elements: Record<string, Element> = {
 }
 
 export const elementKeys = Object.keys(elements)
+
+const elementBaseColors: Record<string, string> = {
+  energy_body_awareness: '#fbe6a0',
+  loving_and_being_loved: '#d13466',
+  eros: '#f34f45',
+  beauty: '#dc6fe8',
+  trust: '#2ba78f',
+  towards_soulmaking_and_soulfulness: '#8650b5',
+  dimensionality_shading_into_divinity: '#4b66c9',
+  reverence: '#4d88c6',
+  humility: '#7da1c4',
+  a_sense_of_unfathomable_beyonds: '#3b4091',
+  soft_and_elastic_edges: '#7fcbe2',
+  concertina: '#7fd8b8',
+  theatre_like_quality: '#956ae0',
+  created_and_discovered: '#b2895d',
+  logos: '#6b5a4f',
+  not_reducible_to_a_single_meaning: '#6f617f',
+  meaningfulness: '#936353',
+  infinite_echoing_and_mirroring: '#3f8fa6',
+  grace: '#c6aefb',
+  autonomy: '#2f845f',
+  twoness: '#5b8a3a',
+  participation: '#4aa5e6',
+  fullness_of_intention: '#c37b43',
+  duty: '#7a553f',
+  values: '#b1872b',
+  eternality: '#5d66b3',
+  less_fabrication: '#9acbe4',
+  the_lattice: '#4a3b33',
+}
+
+function clampChannel(value: number) {
+  return Math.max(0, Math.min(255, Math.round(value)))
+}
+
+function hexToRgb(hex: string) {
+  const normalized = hex.replace('#', '')
+  const value =
+    normalized.length === 3
+      ? normalized
+          .split('')
+          .map((char) => char + char)
+          .join('')
+      : normalized
+  const r = Number.parseInt(value.slice(0, 2), 16)
+  const g = Number.parseInt(value.slice(2, 4), 16)
+  const b = Number.parseInt(value.slice(4, 6), 16)
+  return { r, g, b }
+}
+
+function rgbToHex({ r, g, b }: { r: number; g: number; b: number }) {
+  const toHex = (channel: number) => clampChannel(channel).toString(16).padStart(2, '0')
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+}
+
+function mixWith(hex: string, mix: { r: number; g: number; b: number }, amount: number) {
+  const base = hexToRgb(hex)
+  const r = base.r + (mix.r - base.r) * amount
+  const g = base.g + (mix.g - base.g) * amount
+  const b = base.b + (mix.b - base.b) * amount
+  return rgbToHex({ r, g, b })
+}
+
+function getLuminance(hex: string) {
+  const { r, g, b } = hexToRgb(hex)
+  const [rs, gs, bs] = [r, g, b].map((channel) => {
+    const c = channel / 255
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+  })
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
+}
+
+function buildTagColor(hex: string): TagColor {
+  const luminance = getLuminance(hex)
+  const isDark = luminance < 0.55
+  const text = isDark ? '#f8f3ed' : '#5a3b2a'
+  const hover = isDark
+    ? mixWith(hex, { r: 255, g: 255, b: 255 }, 0.12)
+    : mixWith(hex, { r: 0, g: 0, b: 0 }, 0.12)
+  return { bg: hex, text, hover }
+}
+
+export const elementTagColors: Record<string, TagColor> = Object.fromEntries(
+  elementKeys.map((key) => [key, buildTagColor(elementBaseColors[key])]),
+)

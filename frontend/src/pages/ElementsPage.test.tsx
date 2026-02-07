@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { elements } from '../domain'
+import { elements, elementKeys, elementTagColors } from '../domain'
 import { ElementsPage } from './ElementsPage'
 
 function getElementButton(shortName: string) {
@@ -54,4 +54,21 @@ test('replaces details when clicking a different element', async () => {
   expect(screen.getByText(second.name)).toBeInTheDocument()
   expect(screen.getByText(second.short_desc)).toBeInTheDocument()
   expect(screen.getByText(second.long_desc)).toBeInTheDocument()
+})
+
+test('applies unique tag colors per element', () => {
+  render(<ElementsPage />)
+
+  const backgroundColors = new Set(Object.values(elementTagColors).map((style) => style.bg))
+  expect(backgroundColors.size).toBe(Object.keys(elementTagColors).length)
+
+  for (const key of elementKeys) {
+    const element = elements[key]
+    const button = getElementButton(element.short_name)
+    const style = elementTagColors[key]
+
+    expect(button).toHaveStyle({ '--tag-bg': style.bg })
+    expect(button).toHaveStyle({ '--tag-text': style.text })
+    expect(button).toHaveStyle({ '--tag-hover': style.hover })
+  }
 })

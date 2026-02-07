@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { type CSSProperties, useEffect, useRef, useState } from 'react'
 
 import { Card, CardContent } from '@/components/ui/card'
-import { elements, elementKeys, type Element } from '@/domain'
+import { elementTagColors, elements, elementKeys, type Element } from '@/domain'
 
 export function ElementsPage() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [positions, setPositions] = useState<Map<string, { x: number; y: number }>>(new Map())
+  const [fontSize, setFontSize] = useState(14)
   const containerRef = useRef<HTMLDivElement>(null)
 
   function handleSelect(key: string) {
@@ -16,7 +17,9 @@ export function ElementsPage() {
     function layout() {
       if (!containerRef.current) return
       const { clientWidth, clientHeight } = containerRef.current
-      setPositions(computePositions(elementKeys, clientWidth, clientHeight))
+      const layoutResult = computeLayout(elementKeys, clientWidth, clientHeight)
+      setPositions(layoutResult.positions)
+      setFontSize(layoutResult.fontSize)
     }
 
     layout()
@@ -37,13 +40,24 @@ export function ElementsPage() {
           const shortName = elements[key].short_name
           const firstLetter = shortName.slice(0, 1).toUpperCase()
           const rest = shortName.slice(1)
+          const tagColor = elementTagColors[key]
+
+          const tagStyle = {
+            left: pos.x,
+            top: pos.y,
+            fontSize: `${fontSize}px`,
+            lineHeight: `${Math.round(fontSize * 1.4)}px`,
+            '--tag-bg': tagColor.bg,
+            '--tag-text': tagColor.text,
+            '--tag-hover': tagColor.hover,
+          } as CSSProperties
 
           return (
             <button
               key={key}
               onClick={() => handleSelect(key)}
-              style={{ left: pos.x, top: pos.y }}
-              className="absolute whitespace-nowrap text-sm transition-colors hover:opacity-70"
+              style={tagStyle}
+              className="absolute whitespace-nowrap rounded-full bg-[var(--tag-bg)] px-3 py-1 text-[var(--tag-text)] shadow-sm transition-colors hover:bg-[var(--tag-hover)]"
             >
               <span className="font-semibold">{firstLetter}</span>
               {rest}
@@ -77,6 +91,7 @@ function ElementDetail({ element, onClose }: { element: Element; onClose: () => 
 
 type Rect = { x: number; y: number; w: number; h: number }
 type Position = { x: number; y: number }
+type Layout = { positions: Map<string, Position>; fontSize: number }
 
 function collides(a: Rect, b: Rect, padding: number): boolean {
   return (
@@ -95,14 +110,19 @@ function seededRandom(seed: number): () => number {
   }
 }
 
+function clampNumber(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
 function getLayoutMetrics(containerW: number, containerH: number) {
-  const isSmall = Math.min(containerW, containerH) < 500
-  return {
-    charW: isSmall ? 7 : 8.5,
-    lineH: isSmall ? 20 : 24,
-    padding: isSmall ? 6 : 10,
-    margin: 4,
-  }
+  const minDim = Math.min(containerW, containerH)
+  const fontSize = clampNumber(Math.round(minDim / 24), 13, 22)
+  const lineH = Math.round(fontSize * 1.4)
+  const charW = fontSize * 0.6
+  const padding = fontSize < 14 ? 6 : 10
+  const margin = 4
+
+  return { fontSize, charW, lineH, padding, margin }
 }
 
 function measureLabel(key: string, charW: number, lineH: number) {
@@ -127,13 +147,9 @@ function scoreCandidate(candidate: Rect, placed: Rect[], containerW: number, con
   return distFromCenter * 0.5 - Math.min(minDistToOther, 200) * 0.5 + edgeBonus
 }
 
-function computePositions(
-  keys: string[],
-  containerW: number,
-  containerH: number,
-): Map<string, Position> {
+function computeLayout(keys: string[], containerW: number, containerH: number): Layout {
   const random = seededRandom(42)
-  const { charW, lineH, padding, margin } = getLayoutMetrics(containerW, containerH)
+  const { fontSize, charW, lineH, padding, margin } = getLayoutMetrics(containerW, containerH)
 
   const sizes = keys.map((key) => measureLabel(key, charW, lineH))
   const placed: Rect[] = []
@@ -170,5 +186,5 @@ function computePositions(
     result.set(key, bestPos)
   }
 
-  return result
+  return { positions: result, fontSize }
 }
