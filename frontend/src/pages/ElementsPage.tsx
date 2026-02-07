@@ -37,15 +37,28 @@ export function ElementsPage() {
           onClose={() => setSelectedKey(null)}
         />
       )}
-      {/* Decorative background elements */}
+      {/* Floating colored orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-violet-500/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 left-1/4 w-[300px] h-[300px] bg-rose-500/5 rounded-full blur-3xl" />
+        <div
+          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20 animate-pulse bg-violet-500/30"
+          style={{ animationDuration: '6s' }}
+        />
+        <div
+          className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full blur-3xl opacity-20 animate-pulse bg-amber-500/30"
+          style={{ animationDuration: '8s', animationDelay: '1s' }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-15 animate-pulse bg-rose-500/20"
+          style={{ animationDuration: '7s', animationDelay: '2s' }}
+        />
+        <div
+          className="absolute bottom-1/4 left-1/3 w-[350px] h-[350px] rounded-full blur-3xl opacity-15 animate-pulse bg-emerald-500/20"
+          style={{ animationDuration: '9s', animationDelay: '0.5s' }}
+        />
       </div>
       {/* Subtle grain texture */}
-      <div className="absolute inset-0 opacity-[0.02] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
-      <div ref={containerRef} className="relative h-full w-full p-2">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
+      <div ref={containerRef} className="relative h-full w-full">
         {elementKeys.map((key) => {
           const pos = positions.get(key)
           if (!pos) return null
@@ -69,10 +82,10 @@ export function ElementsPage() {
               key={key}
               onClick={() => handleSelect(key)}
               style={tagStyle}
-              className="absolute whitespace-nowrap bg-transparent px-2 py-1 text-[var(--tag-bg)] transition-all duration-300 hover:text-[var(--tag-text)] hover:drop-shadow-[0_0_12px_var(--tag-bg)] active:scale-95"
+              className="absolute whitespace-nowrap rounded-md bg-[var(--tag-bg)] px-3 py-1 text-[var(--tag-text)] shadow-sm transition-colors hover:bg-[var(--tag-hover)]"
             >
-              <span className="font-light opacity-90 hover:opacity-100">{firstLetter}</span>
-              <span className="font-extralight opacity-70">{rest}</span>
+              <span className="font-semibold">{firstLetter}</span>
+              {rest}
             </button>
           )
         })}
