@@ -1,6 +1,6 @@
 import { type CSSProperties, useEffect, useRef, useState } from 'react'
 
-import { Card, CardContent } from '@/components/ui/card'
+import { ElementDetailCard } from '@/components/ElementDetailCard'
 import { elementTagColors, elements, elementKeys, type Element } from '@/domain'
 
 export function ElementsPage() {
@@ -31,7 +31,11 @@ export function ElementsPage() {
   return (
     <main className="p-1 fixed inset-0 overflow-hidden">
       {selectedKey && (
-        <ElementDetail element={elements[selectedKey]} onClose={() => setSelectedKey(null)} />
+        <ElementDetailOverlay
+          element={elements[selectedKey]}
+          elementKey={selectedKey}
+          onClose={() => setSelectedKey(null)}
+        />
       )}
       <div ref={containerRef} className="relative h-full w-full">
         {elementKeys.map((key) => {
@@ -69,22 +73,37 @@ export function ElementsPage() {
   )
 }
 
-function ElementDetail({ element, onClose }: { element: Element; onClose: () => void }) {
+type ElementDetailOverlayProps = {
+  element: Element
+  elementKey: string
+  onClose: () => void
+}
+
+function ElementDetailOverlay({ element, elementKey, onClose }: ElementDetailOverlayProps) {
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Escape') {
+      onClose()
+    }
+  }
+
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-start bg-black/50 px-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Details for ${element.name}`}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-start bg-black/50 px-4 pt-4 overflow-y-auto"
       onClick={onClose}
+      onKeyDown={handleKeyDown}
     >
-      <Card
-        className="w-full max-w-lg m-4 pt-4 shadow-2xl bg-white"
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <div
+        role="document"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
-        <CardContent className="space-y-3">
-          <p className="text-lg font-semibold">{element.name}</p>
-          <p>{element.short_desc}</p>
-          <p>{element.long_desc}</p>
-        </CardContent>
-      </Card>
+        <ElementDetailCard element={element} elementKey={elementKey} />
+      </div>
     </div>
   )
 }

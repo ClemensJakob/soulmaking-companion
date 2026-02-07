@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { elements, elementKeys, elementTagColors } from '../domain'
 import { ElementsPage } from './ElementsPage'
+
+import { elements, elementKeys, elementTagColors } from '@/domain'
 
 function getElementButton(shortName: string) {
   return screen.getByRole('button', { name: new RegExp(shortName, 'i') })
