@@ -13,7 +13,6 @@ function App() {
 
   return (
     <main className="min-h-dvh bg-stone-950 overflow-hidden relative">
-      {/* Floating colored orbs */}
       <div className="absolute inset-0 overflow-hidden">
         {colors.map((color, i) => (
           <div
@@ -36,13 +35,13 @@ function App() {
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
 
       {/* Content */}
-      <div className="relative z-10 min-h-dvh flex flex-col items-center justify-center px-6 py-12">
+      <div className="relative z-10 min-h-dvh flex flex-col gap-16 items-center justify-center px-6 py-12">
         <h1 className="text-5xl sm:text-7xl font-serif text-white/90 mb-4 tracking-tight">
           Soulmaking
         </h1>
-        <p className="text-white/40 text-lg sm:text-xl mb-16 font-light italic">
+        {/* <p className="text-white/40 text-lg sm:text-xl mb-16 font-light italic">
           elements of the imaginal
-        </p>
+        </p> */}
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-12">
           <Link
@@ -50,20 +49,9 @@ function App() {
             className="group relative"
             style={{ '--glow': colors[0].bg } as CSSProperties}
           >
-            <div className="absolute inset-0 bg-[var(--glow)] opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-(--glow) opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500" />
             <div className="relative px-8 py-4 border border-white/20 rounded-full text-white/70 text-lg font-light tracking-wide text-center transition-all duration-300 group-hover:border-white/40 group-hover:text-white group-hover:tracking-wider">
               explore all
-            </div>
-          </Link>
-
-          <Link
-            to="/elements/random"
-            className="group relative"
-            style={{ '--glow': colors[1].bg } as CSSProperties}
-          >
-            <div className="absolute inset-0 bg-[var(--glow)] opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500" />
-            <div className="relative px-8 py-4 border border-white/20 rounded-full text-white/70 text-lg font-light tracking-wide text-center transition-all duration-300 group-hover:border-white/40 group-hover:text-white group-hover:tracking-wider">
-              random element
             </div>
           </Link>
         </div>

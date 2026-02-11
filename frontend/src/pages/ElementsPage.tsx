@@ -1,13 +1,22 @@
-import { type CSSProperties, useEffect, useRef, useState } from 'react'
+import { type CSSProperties, useCallback, useEffect, useRef, useState } from 'react'
 
 import { ElementDetailCard } from '@/components/ElementDetailCard'
 import { elementTagColors, elements, elementKeys, type Element } from '@/domain'
+
+function getRandomElementKey(excludeKey?: string | null): string {
+  const available = excludeKey ? elementKeys.filter((k) => k !== excludeKey) : elementKeys
+  return available[Math.floor(Math.random() * available.length)]
+}
 
 export function ElementsPage() {
   const [selectedKey, setSelectedKey] = useState<string | null>(null)
   const [positions, setPositions] = useState<Map<string, { x: number; y: number }>>(new Map())
   const [fontSize, setFontSize] = useState(14)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const handleNewElement = useCallback(() => {
+    setSelectedKey((prev) => getRandomElementKey(prev))
+  }, [])
 
   function handleSelect(key: string) {
     setSelectedKey((prev) => (prev === key ? null : key))
@@ -35,24 +44,25 @@ export function ElementsPage() {
           element={elements[selectedKey]}
           elementKey={selectedKey}
           onClose={() => setSelectedKey(null)}
+          handleNewElement={handleNewElement}
         />
       )}
       {/* Floating colored orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20 animate-pulse bg-violet-500/30"
+          className="absolute -top-32 -right-32 w-125 h-125 rounded-full blur-3xl opacity-20 animate-pulse bg-violet-500/30"
           style={{ animationDuration: '6s' }}
         />
         <div
-          className="absolute -bottom-32 -left-32 w-[400px] h-[400px] rounded-full blur-3xl opacity-20 animate-pulse bg-amber-500/30"
+          className="absolute -bottom-32 -left-32 w-100 h-100 rounded-full blur-3xl opacity-20 animate-pulse bg-amber-500/30"
           style={{ animationDuration: '8s', animationDelay: '1s' }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full blur-3xl opacity-15 animate-pulse bg-rose-500/20"
+          className="absolute top-1/3 right-1/4 w-75 h-75 rounded-full blur-3xl opacity-15 animate-pulse bg-rose-500/20"
           style={{ animationDuration: '7s', animationDelay: '2s' }}
         />
         <div
-          className="absolute bottom-1/4 left-1/3 w-[350px] h-[350px] rounded-full blur-3xl opacity-15 animate-pulse bg-emerald-500/20"
+          className="absolute bottom-1/4 left-1/3 w-87.5 h-87.5 rounded-full blur-3xl opacity-15 animate-pulse bg-emerald-500/20"
           style={{ animationDuration: '9s', animationDelay: '0.5s' }}
         />
       </div>
@@ -82,7 +92,7 @@ export function ElementsPage() {
               key={key}
               onClick={() => handleSelect(key)}
               style={tagStyle}
-              className="absolute whitespace-nowrap rounded-md bg-[var(--tag-bg)] px-3 py-1 text-[var(--tag-text)] shadow-sm transition-colors hover:bg-[var(--tag-hover)]"
+              className="absolute whitespace-nowrap rounded-md bg-(--tag-bg) px-3 py-1 text-(--tag-text) shadow-sm transition-colors hover:bg-(--tag-hover)"
             >
               <span className="font-semibold">{firstLetter}</span>
               {rest}
@@ -94,36 +104,45 @@ export function ElementsPage() {
   )
 }
 
-type ElementDetailOverlayProps = {
+function ElementDetailOverlay({
+  element,
+  elementKey,
+  onClose,
+  handleNewElement,
+}: {
   element: Element
   elementKey: string
   onClose: () => void
-}
-
-function ElementDetailOverlay({ element, elementKey, onClose }: ElementDetailOverlayProps) {
-  function handleKeyDown(e: React.KeyboardEvent) {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }
-
+  handleNewElement: () => void
+}) {
   return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={`Details for ${element.name}`}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-start bg-black/50 px-4 pt-4 overflow-y-auto"
+      role="presentation"
       onClick={onClose}
-      onKeyDown={handleKeyDown}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-start bg-black/70 px-4 pt-4 overflow-y-auto"
     >
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <div
-        role="document"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Details for ${element.name}`}
+        className="flex flex-col items-center justify-start pointer-events-auto"
+        onClick={(event) => event.stopPropagation()}
       >
-        <ElementDetailCard element={element} elementKey={elementKey} />
+        <div className={`transition-all duration-300 ease-out transform`}>
+          <ElementDetailCard element={element} elementKey={elementKey} />
+        </div>
+        <div className="mt-10">
+          <button
+            type="button"
+            onClick={(e) => {
+              handleNewElement()
+              e.stopPropagation()
+            }}
+            className="px-8 py-3 border bg-white border-white/20 text-black/70 font-light tracking-wide rounded-full hover:border-white/40 hover:text-gray-400 hover:tracking-wider active:scale-95 transition-all duration-300 disabled:opacity-50"
+          >
+            reveal another
+          </button>
+        </div>
       </div>
     </div>
   )

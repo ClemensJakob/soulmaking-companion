@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 import { ElementsPage } from './pages/ElementsPage'
-import { RandomElementPage } from './pages/RandomElementPage'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,7 +12,6 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/elements" element={<ElementsPage />} />
-        <Route path="/elements/random" element={<RandomElementPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

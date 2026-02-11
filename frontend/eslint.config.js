@@ -46,13 +46,12 @@ export default defineConfig([
       'react-refresh': reactRefresh,
     },
     rules: {
+      'jsx-a11y/click-events-have-key-events': 'off',
+      'jsx-a11y/no-noninteractive-element-interactions': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'import/no-unresolved': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'import/order': [
         'error',
         {
