@@ -2,8 +2,9 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 
-import { AuthProvider } from '@/contexts/AuthContext'
 import { LoginPage } from './LoginPage'
+
+import { AuthProvider } from '@/contexts/AuthContext'
 
 vi.mock('@/api-client', () => ({
   getAuthUser: vi.fn(() => null),

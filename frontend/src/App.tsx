@@ -1,8 +1,9 @@
 import { User } from 'lucide-react'
-import { type CSSProperties, useMemo } from 'react'
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { elementKeys, elementTagColors } from '@/domain'
+import { useAuth } from '@/hooks/useAuth'
 
 function getRandomColors(count: number): Array<{ bg: string; text: string }> {
   const shuffled = [...elementKeys].sort(() => Math.random() - 0.5)
@@ -11,6 +12,21 @@ function getRandomColors(count: number): Array<{ bg: string; text: string }> {
 
 function App() {
   const colors = useMemo(() => getRandomColors(8), [])
+  const { user, logout } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [menuOpen])
 
   return (
     <main className="min-h-dvh bg-stone-950 overflow-hidden relative">
@@ -33,13 +49,43 @@ function App() {
       </div>
 
       {/* Auth icon */}
-      <Link
-        to="/login"
-        className="absolute top-6 right-6 z-20 p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors"
-        aria-label="Sign in"
-      >
-        <User className="w-5 h-5" />
-      </Link>
+      <div className="absolute top-6 right-6 z-20" ref={menuRef}>
+        {user ? (
+          <>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors"
+              aria-label="User menu"
+            >
+              <User className="w-5 h-5" />
+            </button>
+            {menuOpen && (
+              <div className="absolute right-0 mt-2 min-w-36 rounded-lg border border-white/20 bg-stone-900 shadow-xl">
+                <div className="px-4 py-2 text-white/40 text-xs truncate border-b border-white/10">
+                  {user.email}
+                </div>
+                <button
+                  onClick={() => {
+                    logout()
+                    setMenuOpen(false)
+                  }}
+                  className="w-full px-4 py-2.5 text-left text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors rounded-b-lg"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <Link
+            to="/login"
+            className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors block"
+            aria-label="Sign in"
+          >
+            <User className="w-5 h-5" />
+          </Link>
+        )}
+      </div>
 
       {/* Subtle grain texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
