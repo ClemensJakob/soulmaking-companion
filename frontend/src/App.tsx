@@ -48,44 +48,46 @@ function App() {
         ))}
       </div>
 
-      {/* Auth icon */}
-      <div className="absolute top-6 right-6 z-20" ref={menuRef}>
-        {user ? (
-          <>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors"
-              aria-label="User menu"
+      {/* Auth icon - only in development */}
+      {import.meta.env.DEV && (
+        <div className="absolute top-6 right-6 z-20" ref={menuRef}>
+          {user ? (
+            <>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors"
+                aria-label="User menu"
+              >
+                <User className="w-5 h-5" />
+              </button>
+              {menuOpen && (
+                <div className="absolute right-0 mt-2 min-w-36 rounded-lg border border-white/20 bg-stone-900 shadow-xl">
+                  <div className="px-4 py-2 text-white/40 text-xs truncate border-b border-white/10">
+                    {user.email}
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout()
+                      setMenuOpen(false)
+                    }}
+                    className="w-full px-4 py-2.5 text-left text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors rounded-b-lg"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <Link
+              to="/login"
+              className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors block"
+              aria-label="Sign in"
             >
               <User className="w-5 h-5" />
-            </button>
-            {menuOpen && (
-              <div className="absolute right-0 mt-2 min-w-36 rounded-lg border border-white/20 bg-stone-900 shadow-xl">
-                <div className="px-4 py-2 text-white/40 text-xs truncate border-b border-white/10">
-                  {user.email}
-                </div>
-                <button
-                  onClick={() => {
-                    logout()
-                    setMenuOpen(false)
-                  }}
-                  className="w-full px-4 py-2.5 text-left text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors rounded-b-lg"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <Link
-            to="/login"
-            className="p-2 rounded-full border border-white/20 text-white/50 hover:text-white hover:border-white/40 transition-colors block"
-            aria-label="Sign in"
-          >
-            <User className="w-5 h-5" />
-          </Link>
-        )}
-      </div>
+            </Link>
+          )}
+        </div>
+      )}
 
       {/* Subtle grain texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjMwMCIgaGVpZ2h0PSIzMDAiIGZpbHRlcj0idXJsKCNhKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
