@@ -37,6 +37,28 @@ export function ElementDetailCard({ element, elementKey, className = '' }: Eleme
       </CardHeader>
       <CardContent className="pt-2">
         <p className="text-gray-700 leading-relaxed">{element.long_desc}</p>
+
+        {element.questions && element.questions.length > 0 && (
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h4 className="text-sm font-semibold text-gray-900 mb-3 uppercase tracking-wide">
+              Questions to Explore
+            </h4>
+            <ul className="space-y-2">
+              {element.questions.map((question, index) => (
+                <li
+                  key={index}
+                  className="flex items-start gap-2 text-gray-700 text-sm leading-relaxed"
+                >
+                  <span
+                    className="inline-block w-1.5 h-1.5 rounded-full mt-2 flex-shrink-0"
+                    style={{ backgroundColor: tagColor.bg }}
+                  />
+                  <span>{question}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
