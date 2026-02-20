@@ -48,7 +48,7 @@ function App() {
         ))}
       </div>
 
-      {import.meta.env.DEV && (
+      {import.meta?.env?.DEV && (
         <div className="absolute top-6 right-6 z-20" ref={menuRef}>
           {user ? (
             <>
