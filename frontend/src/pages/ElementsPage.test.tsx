@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import { ElementsPage } from './ElementsPage'
@@ -55,6 +55,44 @@ test('replaces details when clicking a different element', async () => {
   expect(screen.getByText(second.name)).toBeInTheDocument()
   expect(screen.getByText(second.short_desc)).toBeInTheDocument()
   expect(screen.getByText(second.long_desc)).toBeInTheDocument()
+})
+
+test('closes detail card when clicking outside the card', async () => {
+  const user = userEvent.setup()
+  const { container } = render(<ElementsPage />)
+
+  const element = elements.the_lattice
+  await user.click(getElementButton(element.short_name))
+  expect(screen.getByText(element.name)).toBeInTheDocument()
+
+  const backdrop = container.querySelector('[role="presentation"]')
+  expect(backdrop).toBeInTheDocument()
+  fireEvent.click(backdrop!)
+  expect(screen.queryByText(element.name)).not.toBeInTheDocument()
+})
+
+test('does not close detail card when clicking inside the card', async () => {
+  const user = userEvent.setup()
+  render(<ElementsPage />)
+
+  const element = elements.the_lattice
+  await user.click(getElementButton(element.short_name))
+  expect(screen.getByText(element.name)).toBeInTheDocument()
+
+  fireEvent.click(screen.getByRole('dialog'))
+  expect(screen.getByText(element.name)).toBeInTheDocument()
+})
+
+test('does not close detail card when clicking the reveal another button', async () => {
+  const user = userEvent.setup()
+  render(<ElementsPage />)
+
+  const element = elements.the_lattice
+  await user.click(getElementButton(element.short_name))
+  expect(screen.getByRole('dialog')).toBeInTheDocument()
+
+  await user.click(screen.getByRole('button', { name: /reveal another/i }))
+  expect(screen.getByRole('dialog')).toBeInTheDocument()
 })
 
 test('applies unique tag colors per element', () => {
