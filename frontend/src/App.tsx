@@ -48,7 +48,6 @@ function App() {
         ))}
       </div>
 
-      {/* Auth icon - only in development */}
       {import.meta.env.DEV && (
         <div className="absolute top-6 right-6 z-20" ref={menuRef}>
           {user ? (
