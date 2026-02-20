@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import { type CSSProperties } from 'react'
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -7,9 +8,10 @@ type ElementDetailCardProps = {
   element: Element
   elementKey: string
   className?: string
+  onClose?: () => void
 }
 
-export function ElementDetailCard({ element, elementKey, className = '' }: ElementDetailCardProps) {
+export function ElementDetailCard({ element, elementKey, className = '', onClose }: ElementDetailCardProps) {
   const tagColor = elementTagColors[elementKey]
 
   const cardStyle = {
@@ -24,12 +26,24 @@ export function ElementDetailCard({ element, elementKey, className = '' }: Eleme
     >
       <div className="h-2 w-full bg-[var(--accent-color)]" />
       <CardHeader className="pb-2">
-        <div className="flex items-center gap-3">
-          <div
-            className="w-3 h-3 rounded-full flex-shrink-0"
-            style={{ backgroundColor: tagColor.bg }}
-          />
-          <CardTitle className="text-xl font-bold text-gray-900">{element.name}</CardTitle>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div
+              className="w-3 h-3 rounded-full flex-shrink-0"
+              style={{ backgroundColor: tagColor.bg }}
+            />
+            <CardTitle className="text-xl font-bold text-gray-900">{element.name}</CardTitle>
+          </div>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            >
+              <X size={18} aria-hidden="true" />
+            </button>
+          )}
         </div>
         <CardDescription className="text-base text-gray-600 mt-2 italic border-l-4 pl-3 border-[var(--accent-color)]">
           {element.short_desc}

@@ -129,7 +129,7 @@ function ElementDetailOverlay({
         onClick={(event) => event.stopPropagation()}
       >
         <div className={`transition-all duration-300 ease-out transform`}>
-          <ElementDetailCard element={element} elementKey={elementKey} />
+          <ElementDetailCard element={element} elementKey={elementKey} onClose={onClose} />
         </div>
         <div className="mt-10">
           <button
