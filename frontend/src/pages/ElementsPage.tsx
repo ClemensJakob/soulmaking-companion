@@ -125,10 +125,12 @@ function ElementDetailOverlay({
         role="dialog"
         aria-modal="true"
         aria-label={`Details for ${element.name}`}
-        className="flex flex-col items-center justify-start pointer-events-auto"
-        onClick={(event) => event.stopPropagation()}
+        className="flex flex-col items-center justify-start"
       >
-        <div className={`transition-all duration-300 ease-out transform`}>
+        <div
+          className={`transition-all duration-300 ease-out transform`}
+          onClick={(event) => event.stopPropagation()}
+        >
           <ElementDetailCard element={element} elementKey={elementKey} onClose={onClose} />
         </div>
         <div className="mt-10">

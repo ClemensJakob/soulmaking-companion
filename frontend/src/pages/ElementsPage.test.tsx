@@ -79,7 +79,7 @@ test('does not close detail card when clicking inside the card', async () => {
   await user.click(getElementButton(element.short_name))
   expect(screen.getByText(element.name)).toBeInTheDocument()
 
-  fireEvent.click(screen.getByRole('dialog'))
+  fireEvent.click(screen.getByText(element.short_desc))
   expect(screen.getByText(element.name)).toBeInTheDocument()
 })
 
