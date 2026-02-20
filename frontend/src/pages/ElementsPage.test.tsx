@@ -95,6 +95,18 @@ test('does not close detail card when clicking the reveal another button', async
   expect(screen.getByRole('dialog')).toBeInTheDocument()
 })
 
+test('closes detail card when clicking the close button in the card', async () => {
+  const user = userEvent.setup()
+  render(<ElementsPage />)
+
+  const element = elements.the_lattice
+  await user.click(getElementButton(element.short_name))
+  expect(screen.getByText(element.name)).toBeInTheDocument()
+
+  await user.click(screen.getByRole('button', { name: /close/i }))
+  expect(screen.queryByText(element.name)).not.toBeInTheDocument()
+})
+
 test('applies unique tag colors per element', () => {
   render(<ElementsPage />)
 
